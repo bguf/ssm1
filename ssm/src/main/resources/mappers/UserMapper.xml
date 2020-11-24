@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bguf.dao.UserMapper">
+
+    <select id="login" resultType="java.lang.Integer">
+        select id from t_user where name = #{name} and pwd = #{pwd}
+    </select>
+
+    <insert id="register">
+        insert into t_user(name, pwd) values(#{name}, #{pwd})
+    </insert>
+
+    <insert id="add">
+        insert into t_tax (id, money, date, uid, imgurl) values(null, #{money}, now(), #{uid}, #{imgurl})
+    </insert>
+
+    <select id="query" resultType="com.bguf.entity.Tax">
+        select * from t_tax
+        <where>
+            <if test="uid != null and uid>0">
+                uid = #{uid}
+            </if>
+            <if test="date1 != null and date1 != ''">
+                and date >= #{date1}
+            </if>
+            <if test="date2 != null and date2 != ''">
+                and date &lt;=#{date2}
+            </if>
+            <if test="money1 != null and money1 != ''">
+                and money >=#{money1}
+            </if>
+            <if test="money2 != null and money2 != ''">
+                and money &lt;= #{money2}
+            </if>
+        </where>
+    </select>
+
+    <insert id="addLog">
+        insert into t_log(id, date, uid, type) value(null, now(), #{uid}, #{type})
+    </insert>
+
+    <select id="loglist" resultType="com.bguf.entity.Log">
+        select * from t_log where uid = #{uid}
+    </select>
+</mapper>
